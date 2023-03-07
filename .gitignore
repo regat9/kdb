@@ -1,3 +1,5 @@
-backups
-.ssh
+
+/backups/
+/nginx/logs/
+/.ssh/
 .env
