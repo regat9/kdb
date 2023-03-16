@@ -14,7 +14,7 @@
           <div class="col">
             <div class="card">
               <a href="#">
-                <img src="images/aj11.jpg" class="card-img-top previews__image" alt="Air Jordan 4 Retro 'Midnight Navy'">
+                <img src="images/aj11-300.jpg" class="card-img-top previews__image" alt="Air Jordan 4 Retro 'Midnight Navy'">
                 <div class="card-body previews__title">
                   Air Jordan 4 Retro 'Midnight Navy'
                 </div>
@@ -24,7 +24,7 @@
           <div class="col">
             <div class="card">
               <a href="#">
-                <img src="images/aj10.jpg" class="card-img-top" alt="Public School x Air Jordan 12 Retro 'PSNY'">
+                <img src="images/aj11-200.jpg" class="card-img-top" alt="Public School x Air Jordan 12 Retro 'PSNY'">
                 <div class="card-body previews__title">
                   Public School x Air Jordan 12 Retro 'PSNY'
                 </div>
