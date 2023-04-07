@@ -186,7 +186,7 @@
                     <div class="col">
                         <div class="card">
                             <a href="#">
-                                <img src="{{ asset('img' . $kick->getImages->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>
@@ -235,7 +235,7 @@
                     <div class="col">
                         <div class="card">
                             <a href="#">
-                                <img src="{{ asset('img' . $kick->getImages->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>
@@ -284,7 +284,7 @@
                     <div class="col">
                         <div class="card">
                             <a href="#">
-                                <img src="{{ asset('img' . $kick->getImages->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>
