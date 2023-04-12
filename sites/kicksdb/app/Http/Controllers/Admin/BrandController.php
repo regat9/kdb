@@ -15,7 +15,7 @@ class BrandController extends Controller
     {
         $brands = Brand::orderBy('id')->paginate(10);
 
-        return view('brand.index', compact('brands'));
+        return view('admin.brand.index', compact('brands'));
     }
 
     /**
@@ -23,7 +23,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('brand.form');
+        return view('admin.brand.form');
     }
 
     /**
@@ -34,7 +34,7 @@ class BrandController extends Controller
         $data = $request->validated();
         Brand::create($data);
 
-        return redirect()->route('brands.index');
+        return to_route('brands.index');
     }
 
     /**
@@ -42,7 +42,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        // return view('brand.show', compact('brand'));
+        //
     }
 
     /**
@@ -50,7 +50,7 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        return view('brand.form', compact('brand'));
+        return view('admin.brand.form', compact('brand'));
     }
 
     /**
@@ -61,7 +61,7 @@ class BrandController extends Controller
         $data = $request->validated();
         $brand->update($data);
 
-        return redirect()->route('brands.index');
+        return to_route('brands.index');
     }
 
     /**
@@ -71,6 +71,6 @@ class BrandController extends Controller
     {
         $brand->delete();
 
-        return redirect()->route('brands.index');
+        return to_route('brands.index');
     }
 }

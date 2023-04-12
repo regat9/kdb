@@ -16,7 +16,7 @@ class KmodelController extends Controller
     {
         $kmodels = Kmodel::orderBy('id')->paginate(10);
 
-        return view('kmodel.index', compact('kmodels'));
+        return view('admin.kmodel.index', compact('kmodels'));
     }
 
     /**
@@ -24,7 +24,7 @@ class KmodelController extends Controller
      */
     public function create()
     {
-        return view('kmodel.form');
+        return view('admin.kmodel.form');
     }
 
     /**
@@ -35,7 +35,7 @@ class KmodelController extends Controller
         $data = $request->validated();
         Kmodel::create($data);
 
-        return redirect()->route('kmodels.index');
+        return to_route('kmodels.index');
     }
 
     /**
@@ -51,7 +51,7 @@ class KmodelController extends Controller
      */
     public function edit(Kmodel $kmodel)
     {
-        return view('kmodel.form', compact('kmodel'));
+        return view('admin.kmodel.form', compact('kmodel'));
     }
 
     /**
@@ -62,7 +62,7 @@ class KmodelController extends Controller
         $data = $request->validated();
         $kmodel->update($data);
 
-        return redirect()->route('kmodels.index');
+        return to_route('kmodels.index');
     }
 
     /**
@@ -72,6 +72,6 @@ class KmodelController extends Controller
     {
         $kmodel->delete();
 
-        return redirect()->route('kmodels.index');
+        return to_route('kmodels.index');
     }
 }

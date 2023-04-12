@@ -15,15 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kick_id');
             $table->string('image_orig');
-            $table->string('image_b');
-            $table->string('image_s');
+            $table->string('image_b')->nullable();
+            $table->string('image_s')->nullable();
             $table->timestamps();
-
-            // $table->foreign('kick_id')
-            //     ->references('id')
-            //     ->on('kicks')
-            //     ->onUpdate('cascade')
-            //     ->onDelete('cascade');
         });
     }
 

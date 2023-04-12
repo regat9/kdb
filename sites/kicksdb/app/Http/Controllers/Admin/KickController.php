@@ -8,9 +8,9 @@ use App\Models\Brand;
 use App\Models\Collabrand;
 use App\Models\Designer;
 use App\Models\Image;
+use App\Models\Kick;
 use App\Models\Kmodel;
 use App\Models\Person;
-use App\Models\Kick;
 
 class KickController extends Controller
 {
@@ -25,7 +25,7 @@ class KickController extends Controller
     {
         $kicks = Kick::orderBy('id', 'desc')->paginate(20);
 
-        return view('kick.index', compact('kicks'));
+        return view('admin.kick.index', compact('kicks'));
     }
 
     /**
@@ -40,7 +40,7 @@ class KickController extends Controller
         $people = Person::all();
         $kmodels = Kmodel::all();
 
-        return view('kick.form', compact(
+        return view('admin.kick.form', compact(
             'kicks',
             'brands',
             'collabrands',
@@ -84,7 +84,7 @@ class KickController extends Controller
             }
         }
 
-        return redirect()->route('kicks.index');
+        return to_route('kicks.index');
     }
 
     /**
@@ -106,7 +106,7 @@ class KickController extends Controller
         $people = Person::all();
         $kmodels = Kmodel::all();
 
-        return view('kick.form', compact(
+        return view('admin.kick.form', compact(
             'kick',
             'brands',
             'collabrands',
@@ -122,6 +122,7 @@ class KickController extends Controller
     public function update(KickRequest $request, Kick $kick)
     {
         $data = $request->validated();
+        // dd($data['kmodel_id']);
 
         $relations = ['brands', 'collabrands', 'designers', 'people', 'images'];
 
@@ -138,9 +139,13 @@ class KickController extends Controller
             unset($data[$relation]);
         }
 
+        if (!isset($data['kmodel_id'])) {
+            $kick->kmodel_id = null;
+        }
+
         $kick->update($data);
 
-        return redirect()->route('kicks.index');
+        return to_route('kicks.index');
     }
 
     /**
@@ -150,7 +155,7 @@ class KickController extends Controller
     {
         $kick->delete();
 
-        return redirect()->route('kicks.index');
+        return to_route('kicks.index');
     }
 
      /**

@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Kmodel extends Model
 {
-    use HasFactory;
+    protected $guarded = false;
 
-    public function getKicks(): HasMany
+    public function kicks(): HasMany
     {
         return $this->hasMany(Kick::class);
     }

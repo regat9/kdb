@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('kicks', function (Blueprint $table) {
             $table->id();
             $table->string('title')->unique();
-            $table->text('description')->nullable();
             $table->string('style_code')->unique()->nullable();
+            $table->text('description')->nullable();
             $table->date('release_date')->nullable();
             $table->unsignedBigInteger('kmodel_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->boolean('is_published')->default('true');
             $table->timestamps();
         });
     }

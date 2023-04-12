@@ -15,7 +15,7 @@ class CollabrandController extends Controller
     {
         $collabrands = Collabrand::orderBy('id')->paginate(5);
 
-        return view('collabrand.index', compact('collabrands'));
+        return view('admin.collabrand.index', compact('collabrands'));
     }
 
     /**
@@ -23,7 +23,7 @@ class CollabrandController extends Controller
      */
     public function create()
     {
-        return view('collabrand.form');
+        return view('admin.collabrand.form');
     }
 
     /**
@@ -34,7 +34,7 @@ class CollabrandController extends Controller
         $data = $request->validated();
         Collabrand::create($data);
 
-        return redirect()->route('collabrands.index');
+        return to_route('collabrands.index');
     }
 
     /**
@@ -50,7 +50,7 @@ class CollabrandController extends Controller
      */
     public function edit(Collabrand $collabrand)
     {
-        return view('collabrand.form', compact('collabrand'));
+        return view('admin.collabrand.form', compact('collabrand'));
     }
 
     /**
@@ -61,7 +61,7 @@ class CollabrandController extends Controller
         $data = $request->validated();
         $collabrand->update($data);
 
-        return redirect()->route('collabrands.index');
+        return to_route('collabrands.index');
     }
 
     /**
@@ -71,6 +71,6 @@ class CollabrandController extends Controller
     {
         $collabrand->delete();
 
-        return redirect()->route('collabrands.index');
+        return to_route('collabrands.index');
     }
 }

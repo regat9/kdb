@@ -15,7 +15,7 @@ class DesignerController extends Controller
     {
         $designers = Designer::orderBy('id')->paginate(10);
 
-        return view('designer.index', compact('designers'));
+        return view('admin.designer.index', compact('designers'));
     }
 
     /**
@@ -23,7 +23,7 @@ class DesignerController extends Controller
      */
     public function create()
     {
-        return view('designer.form');
+        return view('admin.designer.form');
     }
 
     /**
@@ -34,7 +34,7 @@ class DesignerController extends Controller
         $data = $request->validated();
         Designer::create($data);
 
-        return redirect()->route('designers.index');
+        return to_route('designers.index');
     }
 
     /**
@@ -50,7 +50,7 @@ class DesignerController extends Controller
      */
     public function edit(Designer $designer)
     {
-        return view('designer.form', compact('designer'));
+        return view('admin.designer.form', compact('designer'));
     }
 
     /**
@@ -61,7 +61,7 @@ class DesignerController extends Controller
         $data = $request->validated();
         $designer->update($data);
 
-        return redirect()->route('designers.index');
+        return to_route('designers.index');
     }
 
     /**
@@ -71,6 +71,6 @@ class DesignerController extends Controller
     {
         $designer->delete();
 
-        return redirect()->route('designers.index');
+        return to_route('designers.index');
     }
 }

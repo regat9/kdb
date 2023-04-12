@@ -15,7 +15,7 @@ class PersonController extends Controller
     {
         $people = Person::orderBy('id')->paginate(10);
 
-        return view('person.index', compact('people'));
+        return view('admin.person.index', compact('people'));
     }
 
     /**
@@ -23,7 +23,7 @@ class PersonController extends Controller
      */
     public function create()
     {
-        return view('person.form');
+        return view('admin.person.form');
     }
 
     /**
@@ -34,7 +34,7 @@ class PersonController extends Controller
         $data = $request->validated();
         Person::create($data);
 
-        return redirect()->route('people.index');
+        return to_route('people.index');
     }
 
     /**
@@ -50,7 +50,7 @@ class PersonController extends Controller
      */
     public function edit(Person $person)
     {
-        return view('person.form', compact('person'));
+        return view('admin.person.form', compact('person'));
     }
 
     /**
@@ -61,7 +61,7 @@ class PersonController extends Controller
         $data = $request->validated();
         $person->update($data);
 
-        return redirect()->route('people.index');
+        return to_route('people.index');
     }
 
     /**
@@ -71,6 +71,6 @@ class PersonController extends Controller
     {
         $person->delete();
 
-        return redirect()->route('people.index');
+        return to_route('people.index');
     }
 }

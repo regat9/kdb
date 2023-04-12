@@ -2,54 +2,58 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Brand;
+use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class Kick extends Model
 {
-    use HasFactory;
+    use Filterable;
 
-    public function getImages()
+    protected $guarded = false;
+
+    public function images()
     {
         return $this->hasMany(Image::class);
     }
 
-    public function getBrands()
+    public function brands()
     {
-        return $this->belongsToMany(Brand::class);
+        return $this->belongsToMany(Brand::class)->withPivot('brand_id');
     }
 
-    public function getKmodel()
+    public function kmodel()
     {
         return $this->belongsTo(Kmodel::class, 'kmodel_id', 'id');
     }
 
-    public function getCollabrands()
+    public function collabrands()
     {
         return $this->belongsToMany(Collabrand::class);
     }
 
-    public function getColors()
+    public function colors()
     {
         return $this->belongsToMany(Color::class);
     }
 
-    public function getDesigners()
+    public function designers()
     {
         return $this->belongsToMany(Designer::class);
     }
 
-    public function getPeople()
+    public function people()
     {
         return $this->belongsToMany(Person::class);
     }
 
-    public function getMaterials()
+    public function materials()
     {
         return $this->belongsToMany(Material::class);
     }
 
-    public function getCategory()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }

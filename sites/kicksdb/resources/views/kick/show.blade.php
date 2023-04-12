@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('title')
+{{ $kick->title }} - {{ $kick->style_code }} | KicksDB
+@endsection
+
 @section('content')
 <section class="maincard">
         <div class="container-fluid">
@@ -56,34 +60,32 @@
                             <div class="specs">
                                 <ul>
                                     <li>
-                                        @php
-                                        $brandsArr = $brands->all();
-                                        echo (count($brandsArr) === 1) ? 'Brand:': 'Brands:';
-                                        foreach ($brandsArr as $key=>$brand) {
-                                            echo ' <a href="#">' . $brand->name . '</a>';
-                                            if ($key !== array_key_last($brandsArr)) {
-                                                echo ',';
-                                            }
-                                        }
-                                        @endphp
-                                    </li>
-                                    <li>
-                                        @if ($collaBrands->isNotEmpty())
-                                        @php
-                                        $collaBrandsArr = $collaBrands->all();
-                                        echo (count($collaBrandsArr) === 1) ? 'Collab Brand:': 'Collab Brands:';
-                                        foreach ($collaBrandsArr as $key=>$collaBrand) {
-                                            echo ' <a href="#">' . $collaBrand->name . '</a>';
-                                            if ($key !== array_key_last($collaBrandsArr)) {
-                                                echo ',';
-                                            }
-                                        }
-                                        @endphp
+                                        @if ($brands->isNotEmpty())
+                                            @if (count($brands) > 1)
+                                            Brands:
+                                            @else
+                                            Brand:
+                                            @endif
+                                            @foreach ($brands as $brand)
+                                            <a href="#">{{ $brand->name }}</a>@if (!$loop->last), @endif
+                                            @endforeach
                                         @endif
                                     </li>
                                     <li>
-                                        @if (!empty($kModel))
-                                        Model: <a href="#">{{ $kModel->name }}</a>
+                                        @if ($collaBrands->isNotEmpty())
+                                            @if (count($collaBrands) > 1)
+                                            Collab brands:
+                                            @else
+                                            Collab brand:
+                                            @endif
+                                            @foreach ($collaBrands as $collaBrand)
+                                            <a href="#">{{ $collaBrand->name }}</a>@if (!$loop->last), @endif
+                                            @endforeach
+                                        @endif
+                                    </li>
+                                    <li>
+                                        @if(!empty($kmodel))
+                                        Model: <a href="#">{{ $kmodel->name }}</a>
                                         @endif
                                     </li>
                                     <li>
@@ -93,69 +95,57 @@
                                     </li>
                                     <li>
                                         @if ($colors->isNotEmpty())
-                                        Colorway:
-                                        @php
-                                        $colorsArr = $colors->all();
-                                        foreach ($colorsArr as $key=>$color) {
-                                            echo '<span>' . $color->name . '</span>';
-                                            if ($key !== array_key_last($colorsArr)) {
-                                                echo '/';
-                                            }
-                                        }
-                                        @endphp
+                                            @if (count($kick->colors) > 1)
+                                            Collab brands:
+                                            @else
+                                            Collab brand:
+                                            @endif
+                                            @foreach ($colors as $color)
+                                            <a href="#">{{ $color->name }}</a>@if (!$loop->last) /@endif
+                                            @endforeach
                                         @endif
                                     </li>
                                     <li>
                                         @if ($designers->isNotEmpty())
-                                        @php
-                                        $designersArr = $designers->all();
-                                        echo (count($designersArr) === 1) ? 'Designer:': 'Designers:';
-                                        foreach ($designersArr as $key=>$designer) {
-                                            echo ' <a href="#">' . $designer->name . '</a>';
-                                            if ($key !== array_key_last($designersArr)) {
-                                                echo ',';
-                                            }
-                                        }
-                                        @endphp
+                                            @if (count($designers) > 1)
+                                            Designers:
+                                            @else
+                                            Designer:
+                                            @endif
+                                            @foreach ($designers as $designer)
+                                            <a href="#">{{ $designer->name }}</a>@if (!$loop->last), @endif
+                                            @endforeach
                                         @endif
                                     </li>
                                     <li>
                                         @if ($people->isNotEmpty())
-                                        People:
-                                        @php
-                                        $peopleArr = $people->all();
-                                        foreach ($peopleArr as $key=>$person) {
-                                            echo ' <a href="#">' . $person->name . '</a>';
-                                            if ($key !== array_key_last($peopleArr)) {
-                                                echo ',';
-                                            }
-                                        }
-                                        @endphp
+                                            People:
+                                            @foreach ($people as $person)
+                                            <a href="#">{{ $person->name }}</a>@if (!$loop->last), @endif
+                                            @endforeach
                                         @endif
                                     </li>
                                     <li>
-                                        @if (!empty ($kick->release_date))
-                                        Release Date: <span>{{ $kick->release_date }}</span>
+                                        @if (!empty ($eleaseDate))
+                                        Release Date: <span>{{ $releaseDate }}</span>
                                         @endif
                                     </li>
                                     <li>
                                         @if ($materials->isNotEmpty())
-                                        @php
-                                        $materialsArr = $materials->all();
-                                        echo (count($materialsArr) === 1) ? 'Material:': 'Materials:';
-                                        foreach ($materialsArr as $key=>$material) {
-                                            echo ' <span>' . $material->name . '</span>';
-                                            if ($key !== array_key_last($materialsArr)) {
-                                                echo ',';
-                                            }
-                                        }
-                                        @endphp
+                                            @if (count($materials) > 1)
+                                            Materials:
+                                            @else
+                                            Material:
+                                            @endif
+                                            @foreach ($materials as $material)
+                                            <a href="#">{{ $material->name }}</a>@if (!$loop->last), @endif
+                                            @endforeach
                                         @endif
                                     </li>
                                     <li>
-                                        @if (!empty($category))
+                                        {{-- @if (!empty($category))
                                         Category: <a href="#"> {{ $category->name }}</a>
-                                        @endif
+                                        @endif --}}
                                     </li>
                                 </ul>
                             </div>
@@ -164,7 +154,7 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="description">
-                    {{$kick->description}}
+                    {{$description}}
                     </div>
                 </div>
             </div>
@@ -173,19 +163,20 @@
 
     {{-- More colorways --}}
 
-    @php $kicksCounter = count($kicksByModelWOCurrent); @endphp
-    @if ($kicksCounter > 1)
+    @if (isset($kicksByModelWOCurrent) && (count($kicksByModelWOCurrent) > 0))
     <section class="more-kicks">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
-                    <h2 class="more-kicks__title">More colorways for {{ $kModel->name }}</h2>
+                    <h2 class="more-kicks__title">More colorways for {{ $kmodel->name }}
+                    </h2>
                 </div>
                 <div class="row row-cols-3 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 align-items-center">
                 @foreach ($kicksByModelWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="#">
+                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
+                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
                                 <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
@@ -194,7 +185,7 @@
                         </div>
                     </div>
                 @endforeach
-                @if ($kicksCounter >= $max_number_kicks_in_group)
+                @if (count($kicksByModelWOCurrent) >= $maxNumberKicksInGroup)
                     <div class="col">
                         <div class="card">
                             <div class="card-body text-center">
@@ -211,30 +202,24 @@
 
   {{-- More by same designers--}}
 
-    @php $kicksCounter = count($kicksByDesignersWOCurrent); @endphp
-    @if ($kicksCounter > 1)
+    @if (isset($kicksByDesignersWOCurrent) && (count($kicksByDesignersWOCurrent) > 0))
     <section class="more-kicks">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <h2 class="more-kicks__title">
-                        @php
-                        $designersArr = $designers->all();
-                        echo 'More kicks by ';
-                        foreach ($designersArr as $key=>$designer) {
-                            echo $designer->name;
-                            if ($key !== array_key_last($designersArr)) {
-                                echo ' and ';
-                            }
-                        }
-                        @endphp
+                        More kicks by
+                        @foreach ($designers as $designer)
+                        <a href="#">{{ $designer->name }}</a>@if (!$loop->last) and @endif
+                        @endforeach
                     </h2>
                 </div>
                 <div class="row row-cols-3 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 align-items-center">
                 @foreach ($kicksByDesignersWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="#">
+                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
+                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
                                 <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
@@ -243,7 +228,7 @@
                         </div>
                     </div>
                 @endforeach
-                @if ($kicksCounter >= $max_number_kicks_in_group)
+                @if (count($kicksByDesignersWOCurrent) >= $maxNumberKicksInGroup)
                     <div class="col">
                         <div class="card">
                             <div class="card-body text-center">
@@ -260,30 +245,24 @@
 
   {{-- More by same brands --}}
 
-@php $kicksCounter = count($kicksByBrandsWOCurrent); @endphp
-@if ($kicksCounter > 1)
+@if (isset($kicksByBrandsWOCurrent) && (count($kicksByBrandsWOCurrent) > 0))
     <section class="more-kicks">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <h2 class="more-kicks__title">
-                    @php
-                    $brandsArr = $brands->all();
-                    echo 'More kicks by ';
-                    foreach ($brandsArr as $key=>$brand) {
-                        echo $brand->name;
-                        if ($key !== array_key_last($brandsArr)) {
-                            echo ' and ';
-                        }
-                    }
-                    @endphp
+                        More kicks by
+                        @foreach ($brands as $brand)
+                        <a href="#">{{ $brand->name }}</a>@if (!$loop->last) and @endif
+                        @endforeach
                     </h2>
                 </div>
                 <div class="row row-cols-3 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 align-items-center">
                 @foreach ($kicksByBrandsWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="#">
+                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
+                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
                                 <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
@@ -292,7 +271,7 @@
                         </div>
                     </div>
                 @endforeach
-                @if ($kicksCounter >= $max_number_kicks_in_group)
+                @if (count($kicksByBrandsWOCurrent) >= $maxNumberKicksInGroup)
                     <div class="col">
                         <div class="card">
                             <div class="card-body text-center">
