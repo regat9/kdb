@@ -6,10 +6,11 @@ use App\Models\Brand;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kick extends Model
 {
-    use Filterable;
+    use Filterable, HasFactory;
 
     protected $guarded = false;
 
