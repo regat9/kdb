@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Brand;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kick extends Model
@@ -24,19 +23,14 @@ class Kick extends Model
         return $this->belongsToMany(Brand::class)->withPivot('brand_id');
     }
 
-    public function kmodel()
-    {
-        return $this->belongsTo(Kmodel::class, 'kmodel_id', 'id');
-    }
-
     public function collabrands()
     {
         return $this->belongsToMany(Collabrand::class);
     }
 
-    public function colors()
+    public function kmodel()
     {
-        return $this->belongsToMany(Color::class);
+        return $this->belongsTo(Kmodel::class, 'kmodel_id', 'id');
     }
 
     public function designers()
@@ -47,6 +41,11 @@ class Kick extends Model
     public function people()
     {
         return $this->belongsToMany(Person::class);
+    }
+
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class);
     }
 
     public function materials()
