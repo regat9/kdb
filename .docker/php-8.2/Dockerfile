@@ -1,10 +1,12 @@
-FROM php:8.2.3-fpm-alpine
+FROM php:8.2.5-fpm-alpine
 
 ARG TZ='UTC'
 ARG PROJECT_DIR_ARG='/var/www/'
 ARG USER_ID
 ARG GROUP_ID
 ENV PROJECT_DIR=$PROJECT_DIR_ARG
+
+RUN apk add --no-cache $PHPIZE_DEPS
 
 # https://wiki.alpinelinux.org/wiki/Setting_the_timezone
 RUN echo "${TZ}" && apk --update add tzdata && \
@@ -14,7 +16,11 @@ RUN echo "${TZ}" && apk --update add tzdata && \
 
 RUN apk add --no-cache bash mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu \
     libintl patch acl git gettext-dev libcurl libxml2-dev openssh-client pcre-dev su-exec build-base oniguruma-dev \
-    gmp-dev postgresql-dev gettext gettext-dev
+    gmp-dev postgresql-dev gettext gettext-dev \
+    imagemagick \
+    imagemagick-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
 
 RUN apk add --update --no-cache --virtual build-essentials \
     icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
@@ -42,7 +48,6 @@ RUN apk add --update --no-cache --virtual build-essentials \
     docker-php-ext-install zip && \
     apk del build-essentials && rm -rf /usr/src/php*
 
-RUN apk add --no-cache $PHPIZE_DEPS
 RUN pecl install -o -f redis mongodb \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis \

@@ -1,9 +1,8 @@
 version: "3.9"
-
 services:
 
     nginx:
-        image: nginx:1.23.3-alpine
+        image: nginx:1.24.0-alpine
         container_name: ${PROJECT_NAME}_nginx
         ports:
           - ${NGINX_PORT}:80
@@ -18,7 +17,7 @@ services:
         environment:
           TZ: ${WORKSPACE_TIMEZONE}
         networks:
-          - kicksdb_network
+          - local_network
 
     php:
         build:
@@ -38,7 +37,7 @@ services:
         depends_on:
           - postgres
         networks:
-          - kicksdb_network
+          - local_network
 
     postgres:
         image: postgres:15.2-alpine
@@ -55,8 +54,8 @@ services:
           POSTGRES_USER: ${POSTGRES_USER}
           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         networks:
-          - kicksdb_network       
+          - local_network       
 
 networks:
-    kicksdb_network:
-        name: kicksdb_network
+    local_network:
+        name: local_network
