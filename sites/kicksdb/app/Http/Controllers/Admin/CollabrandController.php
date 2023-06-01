@@ -32,9 +32,9 @@ class CollabrandController extends Controller
     public function store(CollabrandRequest $request)
     {
         $data = $request->validated();
-        Collabrand::create($data);
+        $collabrand = Collabrand::create($data);
 
-        return to_route('collabrands.index');
+        return to_route('collabrands.index')->with('success', "Collab brand <b>$collabrand->name</b> created successfully.");
     }
 
     /**
@@ -61,7 +61,7 @@ class CollabrandController extends Controller
         $data = $request->validated();
         $collabrand->update($data);
 
-        return to_route('collabrands.index');
+        return to_route('collabrands.index')->with('success', "Collab brand <b>$collabrand->name</b> updated successfully.");
     }
 
     /**
@@ -71,6 +71,6 @@ class CollabrandController extends Controller
     {
         $collabrand->delete();
 
-        return to_route('collabrands.index');
+        return to_route('collabrands.index')->with('success', "Collab brand <b>$collabrand->name</b> deleted successfully.");
     }
 }

@@ -32,9 +32,9 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         $data = $request->validated();
-        Brand::create($data);
+        $brand = Brand::create($data);
 
-        return to_route('brands.index');
+        return to_route('brands.index')->with('success', "Brand <b>$brand->name</b> created successfully.");
     }
 
     /**
@@ -61,7 +61,7 @@ class BrandController extends Controller
         $data = $request->validated();
         $brand->update($data);
 
-        return to_route('brands.index');
+        return to_route('brands.index')->with('success', "Brand <b>$brand->name</b> updated successfully.");
     }
 
     /**
@@ -71,6 +71,6 @@ class BrandController extends Controller
     {
         $brand->delete();
 
-        return to_route('brands.index');
+        return to_route('brands.index')->with('success', "Brand <b>$brand->name</b> deleted successfully.");
     }
 }

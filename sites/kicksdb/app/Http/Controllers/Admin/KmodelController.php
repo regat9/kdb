@@ -33,9 +33,9 @@ class KmodelController extends Controller
     public function store(KmodelRequest $request)
     {
         $data = $request->validated();
-        Kmodel::create($data);
+        $kmodel = Kmodel::create($data);
 
-        return to_route('kmodels.index');
+        return to_route('kmodels.index')->with('success', "Model <b>$kmodel->name</b> created successfully.");
     }
 
     /**
@@ -62,7 +62,7 @@ class KmodelController extends Controller
         $data = $request->validated();
         $kmodel->update($data);
 
-        return to_route('kmodels.index');
+        return to_route('kmodels.index')->with('success', "Model <b>$kmodel->name</b> updated successfully.");
     }
 
     /**
@@ -72,6 +72,6 @@ class KmodelController extends Controller
     {
         $kmodel->delete();
 
-        return to_route('kmodels.index');
+        return to_route('kmodels.index')->with('success', "Model <b>$kmodel->name</b> deleted successfully.");
     }
 }

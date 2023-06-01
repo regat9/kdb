@@ -11,19 +11,21 @@ use App\Models\Image;
 use App\Models\Kick;
 use App\Models\Kmodel;
 use App\Models\Person;
+use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class KickController extends Controller
 {
-    const ORIGINAL_IMAGES_DIR = '/orig/';
-    const BIG_IMAGES_DIR = '/b/';
-    const SMALL_IMAGES_DIR = '/s/';
+    const ORIGINAL_IMAGES_DIR = '/img/orig';
+    const BIG_IMAGES_DIR = '/img/b';
+    const SMALL_IMAGES_DIR = '/img/s';
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $kicks = Kick::orderBy('id', 'desc')->paginate(20);
+        $kicks = Kick::orderBy('id', 'asc')->paginate(10);
 
         return view('admin.kick.index', compact('kicks'));
     }
@@ -57,34 +59,52 @@ class KickController extends Controller
     {
         $data = $request->validated();
 
-        $relations = ['brands', 'collabrands', 'designers', 'people', 'images'];
+        $kick = new Kick();
 
-        foreach ($relations as $relation) {
-            if (isset($data[$relation])) {
-                $$relation = $data[$relation];
+        $kick->title = $data['title'];
+        $kick->style_code = $data['style_code'];
+        $kick->kmodel_id = $data['kmodel_id'];
+        $kick->description = $data['description'];
+        $kick->release_date = $data['release_date'];
+        $kick->save();
+
+        $kick->brands()->attach($data['brands']);
+        $kick->collabrands()->attach($data['collabrands']);
+        $kick->designers()->attach($data['designers']);
+        $kick->people()->attach($data['people']);
+
+        if (!empty($data['images'])) {
+            foreach ($data['images'] as $image) {
+                $imageName = strtolower(str_replace(' ', '-', $kick->style_code))
+                    . '-' . substr(uniqid(), -7). '.' . $image->getClientOriginalExtension();
+
+                // Put original image on a disk
+                Storage::disk('public')->putFileAs(self::ORIGINAL_IMAGES_DIR, $image, $imageName);
+
+                $filePathOrig = self::ORIGINAL_IMAGES_DIR . '/' . $imageName;
+
+                // Resize original image to big size
+                $imagick1 = new \Imagick(storage_path('/app/public') . $filePathOrig);
+                $imagick1->resizeImage(1200, 0, \Imagick::FILTER_LANCZOS, 1);
+                Storage::disk('public')->put(self::BIG_IMAGES_DIR . '/' . $imageName, $imagick1->getimageblob());
+
+                // Resize original image to small size
+                $imagick2 = new \Imagick(storage_path('/app/public') . $filePathOrig);
+                $imagick2->resizeImage(300, 0, \Imagick::FILTER_LANCZOS, 1);
+                Storage::disk('public')->put(self::SMALL_IMAGES_DIR . '/' . $imageName, $imagick2->getimageblob());
+
+                $kickImage = Image::create([
+                    'kick_id' => $kick->id,
+                    'img_orig' => $filePathOrig,
+                    'img_b' => self::BIG_IMAGES_DIR . '/' . $imageName,
+                    'img_s' => self::SMALL_IMAGES_DIR . '/' . $imageName,
+                ]);
+
+                $kick->images()->save($kickImage);
             }
-
-            unset($data[$relation]);
         }
 
-        $kick = Kick::firstOrCreate([
-            'title' => $data['title'],
-            'style_code' => $data['style_code'],
-        ], $data);
-
-        $kick->update($data);
-
-        $this->uploadImages($request, $kick);
-
-        foreach ($relations as $relation) {
-            if  (!empty($$relation) && $relation != 'images') {
-                foreach ($$relation as $item) {
-                    $kick->$relation()->attach($item);
-                }
-            }
-        }
-
-        return to_route('kicks.index');
+        return to_route('kicks.index')->with('success', "Kick <b>$kick->title</b> created successfully.");
     }
 
     /**
@@ -122,30 +142,52 @@ class KickController extends Controller
     public function update(KickRequest $request, Kick $kick)
     {
         $data = $request->validated();
-        // dd($data['kmodel_id']);
 
-        $relations = ['brands', 'collabrands', 'designers', 'people', 'images'];
+        $kick->update([
+            'title' => $data['title'],
+            'style_code' => $data['style_code'] ?? null,
+            'kmodel_id' => $data['kmodel_id'] ?? null,
+            'description' => $data['description'] ?? null,
+            'release_date' => $data['release_date'] ?? null,
+        ]);
 
-        foreach ($relations as $relation) {
-            if ($relation == 'images') {
-                $this->uploadImages($request, $kick);
-            } elseif (isset($data[$relation])) {
-                $$relation = $data[$relation];
-                $kick->$relation()->sync($$relation);
-            } else {
-                $kick->$relation()->detach();
+        isset($data['brands']) ? $kick->brands()->sync($data['brands']) : $kick->brands()->detach();
+        isset($data['collabrands']) ? $kick->collabrands()->sync($data['collabrands']) : $kick->collabrands()->detach();
+        isset($data['designers']) ? $kick->designers()->sync($data['designers']) : $kick->designers()->detach();
+        isset($data['people']) ? $kick->people()->sync($data['people']) : $kick->people()->detach();
+
+        if (!empty($data['images'])) {
+            foreach ($data['images'] as $image) {
+                $imageName = strtolower(str_replace(' ', '-', $kick->style_code))
+                    . '-' . substr(uniqid(), -7). '.' . $image->getClientOriginalExtension();
+
+                // Put original image on a disk
+                Storage::disk('public')->putFileAs(self::ORIGINAL_IMAGES_DIR, $image, $imageName);
+
+                $filePathOrig = self::ORIGINAL_IMAGES_DIR . '/' . $imageName;
+
+                // Resize original image to big size
+                $imagick1 = new \Imagick(storage_path('/app/public') . $filePathOrig);
+                $imagick1->resizeImage(1200, 0, \Imagick::FILTER_LANCZOS, 1);
+                Storage::disk('public')->put(self::BIG_IMAGES_DIR . '/' . $imageName, $imagick1->getimageblob());
+
+                // Resize original image to small size
+                $imagick2 = new \Imagick(storage_path('/app/public') . $filePathOrig);
+                $imagick2->resizeImage(300, 0, \Imagick::FILTER_LANCZOS, 1);
+                Storage::disk('public')->put(self::SMALL_IMAGES_DIR . '/' . $imageName, $imagick2->getimageblob());
+
+                $kickImage = Image::create([
+                    'kick_id' => $kick->id,
+                    'img_orig' => $filePathOrig,
+                    'img_b' => self::BIG_IMAGES_DIR . '/' . $imageName,
+                    'img_s' => self::SMALL_IMAGES_DIR . '/' . $imageName,
+                ]);
+
+                $kick->images()->save($kickImage);
             }
-
-            unset($data[$relation]);
         }
 
-        if (!isset($data['kmodel_id'])) {
-            $kick->kmodel_id = null;
-        }
-
-        $kick->update($data);
-
-        return to_route('kicks.index');
+        return to_route('kicks.index')->with('success', "Kick <b>$kick->title</b> updated successfully.");
     }
 
     /**
@@ -153,36 +195,17 @@ class KickController extends Controller
      */
     public function destroy(Kick $kick)
     {
+        foreach ($kick->images as $image) {
+            Storage::delete('public' . $image->img_orig);
+            Storage::delete('public' . $image->img_b);
+            Storage::delete('public' . $image->img_s);
+        }
+
+        $kick->images()->delete();
         $kick->delete();
 
-        return to_route('kicks.index');
-    }
+        $title = $kick->title;
 
-     /**
-     * Upload images from a disk
-     */
-    public function uploadImages(KickRequest $request, Kick $kick)
-    {
-        if ($request->hasFile('images')) {
-            $allowedImageExtensions = ['jpg', 'jpeg', 'png'];
-            $images = $request->file('images');
-
-            foreach ($images as $image) {
-                $imageName = $image->getClientOriginalName();
-                $imageExtension = $image->getClientOriginalExtension();
-                $check = in_array($imageExtension, $allowedImageExtensions);
-
-                if ($check) {
-                    $image->move('img/b', $imageName);
-
-                    $kick->images()->save(new Image([
-                        'kick_id' => $kick->id,
-                        'image_orig' => '',
-                        'image_b' => self::BIG_IMAGES_DIR . $imageName,
-                        'image_s' => '',
-                    ]));
-                }
-            }
-        }
+        return to_route('kicks.index')->with('success', "Kick <b>$title</b> deleted successfully.");
     }
 }

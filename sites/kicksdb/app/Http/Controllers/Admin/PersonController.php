@@ -32,9 +32,9 @@ class PersonController extends Controller
     public function store(PersonRequest $request)
     {
         $data = $request->validated();
-        Person::create($data);
+        $person = Person::create($data);
 
-        return to_route('people.index');
+        return to_route('people.index')->with('success', "Person <b>$person->name</b> created successfully.");
     }
 
     /**
@@ -61,7 +61,7 @@ class PersonController extends Controller
         $data = $request->validated();
         $person->update($data);
 
-        return to_route('people.index');
+        return to_route('people.index')->with('success', "Person <b>$person->name</b> updated successfully.");
     }
 
     /**
@@ -71,6 +71,6 @@ class PersonController extends Controller
     {
         $person->delete();
 
-        return to_route('people.index');
+        return to_route('people.index')->with('success', "Person <b>$person->name</b> deleted successfully.");
     }
 }

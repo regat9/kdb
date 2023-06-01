@@ -39,10 +39,6 @@ class KickController extends Controller
         $filter = app()->make(KickFilter::class, ['queryParams' => array_filter($data)]);
         $kicks = Kick::filter($filter)->get();
 
-
-        // $kicks = CollectionHelper::paginate(Kick::getByBrandIds([1, 2]), self::PAGINATION_PAGE_SIZE);
-
-
 // http://kicksdb.localhost/catalog/?brand=1&designer=2&category=2&collabrand=1
 
 

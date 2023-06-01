@@ -32,9 +32,9 @@ class DesignerController extends Controller
     public function store(DesignerRequest $request)
     {
         $data = $request->validated();
-        Designer::create($data);
+        $designer = Designer::create($data);
 
-        return to_route('designers.index');
+        return to_route('designers.index')->with('success', "Designer <b>$designer->name</b> created successfully.");
     }
 
     /**
@@ -61,7 +61,7 @@ class DesignerController extends Controller
         $data = $request->validated();
         $designer->update($data);
 
-        return to_route('designers.index');
+        return to_route('designers.index')->with('success', "Designer <b>$designer->name</b> updated successfully.");
     }
 
     /**
@@ -71,6 +71,6 @@ class DesignerController extends Controller
     {
         $designer->delete();
 
-        return to_route('designers.index');
+        return to_route('designers.index')->with('success', "Designer <b>$designer->name</b> deleted successfully.");
     }
 }

@@ -20,7 +20,6 @@ class KickController2 extends Controller
 
     public function index(Request $request)
     {
-        // dd($request);
         $brands = Brand::all();
         $collabrands = Collabrand::all();
         $models = Kmodel::all();
