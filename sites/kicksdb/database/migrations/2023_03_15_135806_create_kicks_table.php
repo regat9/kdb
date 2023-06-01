@@ -21,6 +21,12 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->boolean('is_published')->default('true');
             $table->timestamps();
+
+            $table->foreign('kmodel_id')
+                ->references('id')
+                ->on('kmodels')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

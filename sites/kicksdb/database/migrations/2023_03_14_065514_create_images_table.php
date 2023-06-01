@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kick_id');
-            $table->string('image_orig');
-            $table->string('image_b')->nullable();
-            $table->string('image_s')->nullable();
+            $table->string('img_orig')->nullable();
+            $table->string('img_b')->nullable();
+            $table->string('img_s')->nullable();
+            $table->unsignedTinyInteger('display_order')->nullable();
             $table->timestamps();
         });
     }
