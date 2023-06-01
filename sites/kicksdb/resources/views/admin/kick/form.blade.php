@@ -120,7 +120,7 @@
             @isset($kick)
                 @php $kimages = $kick->images; @endphp
                 @foreach ($kimages as $kimage)
-                    <img  src="{{ asset('img' . $kimage->image_b) }}" class="img-fluid" width="100">
+                    <img src="{{ asset('storage' . $kimage->img_s) }}"  class="img-fluid" width="100">
                 @endforeach
             @endisset
         </div>

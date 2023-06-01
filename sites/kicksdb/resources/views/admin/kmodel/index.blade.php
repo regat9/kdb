@@ -6,6 +6,12 @@
       <h1 class="h2">Models</h1>
     </div>
 
+    @if (session('success'))
+    <div class="alert alert-success">
+        {!! session('success') !!}
+    </div>
+    @endif
+
     <a href="{{ route('kmodels.create') }}" class="btn btn-primary" type="submit">+ Add model</a>
     <div class="table-responsive">
       <table class="table table-striped table-sm">
@@ -29,7 +35,23 @@
                 <form method="post" action = "{{ route('kmodels.destroy', $kmodel) }}">
                     @csrf
                     @method('delete')
-                    <button type="submit" class="btn btn-danger btn-sm">delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">delete</button>
+
+                    <!-- Modal -->
+                    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="deleteModalLabel">Do you want to delete model?</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-danger">Yes, delete</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div> --}}
                 </form>
             </td>
           </tr>

@@ -14,7 +14,9 @@
                 <div class="card">
                     <a href="kicks/{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
                         . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
-                        <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                        @isset ($kick->images->first()->image_s)
+                        <img src="{{ asset('/storage/' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                        @endisset
                         <div class="card-body previews__title">
                             {{ $kick->title }}
                         </div>
@@ -37,7 +39,9 @@
                 <div class="card">
                     <a href="kicks/{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
                         . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
-                        <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                        @isset ($kick->images->first()->image_s)
+                        <img src="{{ asset('/storage/' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                        @endisset
                         <div class="card-body previews__title">
                             {{ $kick->title }}
                         </div>
