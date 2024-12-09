@@ -23,23 +23,23 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// dd(KickController::class);
-
 // Auth::routes([
 //     'reset' => 'false',
 //     'confirm' => 'false',
 //     'verify' => 'false',
 // ]);
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
-Route::get('/', [StartController::class, 'show'])->name('start');
+// Route::get('/', [StartController::class, 'show'])->name('start');
 
 Route::group([
     'namespace' => 'App\Http\Controllers',
 ], function() {
-    Route::resource('kicks', KickController::class)->parameters(['kicks' => 'slug']);
+    Route::get('/filtersresult', [KickController::class, 'filtersResult'])->name('kicks.filtersresult');
+    // Route::get('/filtersresult?{params}', [KickController::class, 'filtersResult'])->name('kicks.filtersresult');
+    Route::resource('/', KickController::class)->parameters(['' => 'slug']);
+    // Route::get('/', [KickController::class, 'index'])->name('index');
+
 });
 
 Route::group([
@@ -56,7 +56,10 @@ Route::group([
 });
 
 
-
 // Route::get('/', App\Http\Controllers\IndexController::class)->name('catalog')->middleware('auth');
 
 // Route::get('/kicks/{whole_title}', [KickController::class, 'show'])->name('kick');
+
+Auth::routes();
+
+

@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Collabrand;
 use App\Models\Designer;
+use App\Models\Image;
 use App\Models\Kick;
 use App\Models\Person;
 use Illuminate\Database\Seeder;
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $kicks = Kick::factory(30)->create();
+        $kicks = Kick::factory(10)->has(Image::factory(3))->create();
         $brands = Brand::factory(8)->create();
         $collabrands = Collabrand::factory(5)->create();
         $designers = Designer::factory(5)->create();

@@ -17,25 +17,20 @@
                     </div>
 
                     <div id="carouselDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                        @if ($otherImages->isNotEmpty())
                         <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            @foreach ($otherImages as $key=>$image)
-                                <button type="button" data-bs-target="#carouselDark" data-bs-slide-to="{{ $key }}" aria-label="Slide {{ $key+1 }}"></button>
-                            @endforeach
+                        @foreach ($images as $image)
+                            <button type="button" data-bs-target="#carouselDark" data-bs-slide-to="{{ $image->display_order-1 }}" @if ($image->display_order == 1) class="active" aria-current="true" @endif aria-label="{{ $kick->title }}"></button>
+                        @endforeach
                         </div>
-                        @endif
+
                         <div class="carousel-inner">
-                          <div class="carousel-item active" data-bs-interval="5000">
-                            <img src="{{ asset('img/' . $firstImage->image_b) }}" class="d-block w-100" alt="{{ $kick->title }}">
-                          </div>
-                          @foreach ($otherImages as $image)
-                            <div class="carousel-item" data-bs-interval="5000">
-                                <img src="{{ asset('img/' . $image->image_b) }}" class="d-block w-100" alt="{{ $kick->title }}">
+                        @foreach ($images as $image)
+                            <div class="carousel-item @if ($image->display_order == 1) active @endif" data-bs-interval="5000">
+                                <img src="{{ asset('storage' . $image->img_b) }}" class="d-block w-100" alt="{{ $kick->title }}">
                             </div>
-                          @endforeach
+                        @endforeach
                         </div>
-                        @if ($otherImages->isNotEmpty())
+
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselDark" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
@@ -44,7 +39,6 @@
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
-                        @endif
                     </div>
                 </div>
 
@@ -142,11 +136,6 @@
                                             @endforeach
                                         @endif
                                     </li>
-                                    <li>
-                                        {{-- @if (!empty($category))
-                                        Category: <a href="#"> {{ $category->name }}</a>
-                                        @endif --}}
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -175,9 +164,9 @@
                 @foreach ($kicksByModelWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
-                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
-                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                            <a href="{{ $kick->slug }}">
+                                <img src="{{ asset('storage' . $kick->images->where('display_order', 1)->first()->img_s) }}"
+                                    class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>
@@ -218,9 +207,9 @@
                 @foreach ($kicksByDesignersWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
-                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
-                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                            <a href="{{ $kick->slug }}">
+                                <img src="{{ asset('storage' . $kick->images->where('display_order', 1)->first()->img_s) }}"
+                                    class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>
@@ -261,9 +250,9 @@
                 @foreach ($kicksByBrandsWOCurrent as $kick)
                     <div class="col">
                         <div class="card">
-                            <a href="{{ str_replace(' ', '-', preg_replace("/[^a-zA-Z0-9_ -]/s", '', strtolower($kick->title)))
-                                . '_' . str_replace(' ', '-', strtolower($kick->style_code)); }}">
-                                <img src="{{ asset('img' . $kick->images->first()->image_s) }}" class="card-img-top" alt="{{ $kick->title }}">
+                            <a href="{{ $kick->slug }}">
+                                <img src="{{ asset('storage' . $kick->images->where('display_order', 1)->first()->img_s) }}"
+                                    class="card-img-top" alt="{{ $kick->title }}">
                                 <div class="card-body previews__title">
                                     {{ $kick->title }}
                                 </div>

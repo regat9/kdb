@@ -57,21 +57,23 @@ class KickController extends Controller
      */
     public function store(KickRequest $request)
     {
+        try {
         $data = $request->validated();
 
         $kick = new Kick();
 
         $kick->title = $data['title'];
         $kick->style_code = $data['style_code'];
-        $kick->kmodel_id = $data['kmodel_id'];
+        $kick->slug = strtolower(preg_replace("/[^a-zA-Z0-9_ -]/s", '', str_replace(' ', '-', $data['title'] . '_' . $data['style_code'])));
+        $kick->kmodel_id = $data['kmodel_id'] ?? null;
         $kick->description = $data['description'];
         $kick->release_date = $data['release_date'];
         $kick->save();
 
-        $kick->brands()->attach($data['brands']);
-        $kick->collabrands()->attach($data['collabrands']);
-        $kick->designers()->attach($data['designers']);
-        $kick->people()->attach($data['people']);
+        $kick->brands()->attach($data['brands'] ?? null);
+        $kick->collabrands()->attach($data['collabrands'] ?? null);
+        $kick->designers()->attach($data['designers'] ?? null);
+        $kick->people()->attach($data['people'] ?? null);
 
         if (!empty($data['images'])) {
             foreach ($data['images'] as $image) {
@@ -104,6 +106,9 @@ class KickController extends Controller
             }
         }
 
+    } catch (Exception $e) {
+        dd($e->getMessage());
+    }
         return to_route('kicks.index')->with('success', "Kick <b>$kick->title</b> created successfully.");
     }
 
@@ -146,6 +151,7 @@ class KickController extends Controller
         $kick->update([
             'title' => $data['title'],
             'style_code' => $data['style_code'] ?? null,
+            'slug' => strtolower(preg_replace("/[^a-zA-Z0-9_ -]/s", '', str_replace(' ', '-', $data['title'] . '_' . $data['style_code']))) ?? null,
             'kmodel_id' => $data['kmodel_id'] ?? null,
             'description' => $data['description'] ?? null,
             'release_date' => $data['release_date'] ?? null,
@@ -204,8 +210,6 @@ class KickController extends Controller
         $kick->images()->delete();
         $kick->delete();
 
-        $title = $kick->title;
-
-        return to_route('kicks.index')->with('success', "Kick <b>$title</b> deleted successfully.");
+        return to_route('kicks.index')->with('success', "Kick <b>$kick->title</b> deleted successfully.");
     }
 }

@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('img_s')->nullable();
             $table->unsignedTinyInteger('display_order')->nullable();
             $table->timestamps();
+
+            $table->foreign('kick_id')
+                ->references('id')
+                ->on('kicks')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

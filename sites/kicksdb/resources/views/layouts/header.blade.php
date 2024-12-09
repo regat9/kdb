@@ -8,7 +8,7 @@
             </div>
             <div class="col-10 col-sm-10 col-md-10 col-lg-5">
                 <div class="logo d-flex justify-content-center">
-                    <a href="{{ route('start') }}"><span>Kicks DB</span></a>
+                    <a href="{{-- {{ route('index') }}  --}}"><span>Kicks DB</span></a>
                 </div>
             </div>
             <div class="col-1 col-sm-1 col-md-1 col-lg-4">

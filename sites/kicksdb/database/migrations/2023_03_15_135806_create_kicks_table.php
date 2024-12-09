@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('kicks', function (Blueprint $table) {
             $table->id();
             $table->string('title')->unique();
-            $table->string('style_code')->unique()->nullable();
+            $table->string('style_code')->unique();
+            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->date('release_date')->nullable();
             $table->unsignedBigInteger('kmodel_id')->nullable();
